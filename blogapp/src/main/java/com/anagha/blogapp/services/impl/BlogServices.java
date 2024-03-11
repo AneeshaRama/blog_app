@@ -33,7 +33,7 @@ public class BlogServices implements IBlogService {
     @Override
     public BlogResponseDto createBlog(BlogRequestDto payload, long userId) {
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found"));
-        Blog blog = blogRepository.save(new Blog(payload.getTitle(), payload.getContent(), user, LocalDate.now()));
+        Blog blog = blogRepository.save(new Blog(payload.getTitle(), payload.getContent(), user.getFirstName(), user, LocalDate.now()));
         user.getBlogs().add(blog);
         userRepository.save(user);
         return modelMapper.map(blog, BlogResponseDto.class);

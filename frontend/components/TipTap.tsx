@@ -2,10 +2,18 @@ import React from 'react'
 import {useEditor, EditorContent} from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Toolbar from './Toolbar'
+import Heading from '@tiptap/extension-heading'
 
 const TipTap = ({content, onChange}: {content:string, onChange: (richText: string) => void}) => {
     const editor = useEditor({
-        extensions: [StarterKit.configure()],
+        extensions: [StarterKit.configure({
+
+        }), Heading.configure({
+            HTMLAttributes:{
+                class: 'text-3xl font-bold',
+                levels: [1,2]
+            }
+        })],
         content,
         editorProps:{
             attributes:{
@@ -14,7 +22,6 @@ const TipTap = ({content, onChange}: {content:string, onChange: (richText: strin
         },
         onUpdate({editor}){
             onChange(editor.getHTML())
-            console.log(editor.getHTML())
         }
     })
   return (

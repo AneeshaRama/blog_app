@@ -73,11 +73,11 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       backgroundColor:{
-        "main": "#D63484",
-        "main-hover": "#C21292"
+        "main": "#12372A",
+        "main-hover": "#436850"
       },
       textColor:{
-        "main": "#D63484"
+        "main": "#12372A"
       }
     },
   },

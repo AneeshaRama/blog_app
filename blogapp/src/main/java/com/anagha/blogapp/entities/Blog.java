@@ -14,7 +14,10 @@ public class Blog {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
+
+    private String author;
 
     @ManyToOne
     @JsonIgnore
@@ -26,9 +29,10 @@ public class Blog {
 
     }
 
-    public Blog(String title, String content, User user, LocalDate createdAt) {
+    public Blog( String title, String content, String author, User user, LocalDate createdAt) {
         this.title = title;
         this.content = content;
+        this.author = author;
         this.user = user;
         this.createdAt = createdAt;
     }
@@ -73,4 +77,11 @@ public class Blog {
         this.createdAt = createdAt;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 }

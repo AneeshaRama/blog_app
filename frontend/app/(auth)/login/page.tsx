@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -19,6 +19,8 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import Loader from '@/components/Loader'
+import useUserStore from '@/store/userStore'
+import { setItemToLocalStorage } from '@/lib/utils'
 
   const formSchema = z.object({
       email: z.string().min(2,{
@@ -30,8 +32,19 @@ import Loader from '@/components/Loader'
     })
 
 const LoginPage = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const user = useUserStore((state) => state.user);
+    const addUser = useUserStore((state) => state.addUser);
     const router = useRouter();
+
+    useEffect(()=>{
+        if(user !== null){
+            router.push("/")
+        }else{
+            setLoading(false)
+        }
+    },[])
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -43,9 +56,11 @@ const LoginPage = () => {
       async function onSubmit(values: z.infer<typeof formSchema>) {
         try {
             setLoading(true);
-            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, {...values}).then(()=>{
+            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/login`, {...values}).then((data:any)=>{
                 setLoading(false)
                 toast.success("Successfully logged in!")
+                setItemToLocalStorage('user', data.data);
+                addUser(data.data)
                 form.reset();
                 router.push("/");
             })
